@@ -15,7 +15,7 @@
         header('X-XSS-Protection: 0;');
 
         if (!empty($_POST['name'])) {
-            $_SESSION['user'] = $_POST['name'];
+            $_SESSION['user'] = strip_tags($_POST['name']);
         }
 
         if (!empty($_POST['widget-name'])) {
