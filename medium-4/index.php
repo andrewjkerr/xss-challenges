@@ -7,7 +7,21 @@
 <head>
     <title>SIT Widgets</title>
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="sanitize.js"></script>
+    <script>
+        function encodeHTML(s) {
+             return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        }
+
+        $( document ).ready(function() {
+            $('#form-submit').click(function(ev) {
+                ev.preventDefault();
+                var input_box = $('#widget-name-input');
+                var sanitized_input = encodeHTML(input_box.val());
+                input_box.val(sanitized_input);
+                $('#create-form').submit();
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>SIT Widgets</h1>
@@ -24,7 +38,7 @@
             $widget = $_POST['widget-name'];
             $query = $link->prepare("INSERT INTO widget VALUES (?, ?)");
             $query->bind_param('ss', $pName, $pOwner);
-            $pName = $_POST['widget-name'];
+            $pName = strip_tags($_POST['widget-name']);
             $pOwner = $_SESSION['user'];
             $query->execute();
         }
@@ -47,9 +61,10 @@
             $pOwner = $_SESSION['user'];
             $query->execute();
             $query->bind_result($name, $owner);
+            echo "<!-- TO-DO: Implement link tags! -->";
             echo "<ul>";
             while ($query->fetch()) {
-                echo "<li>" . $name . "</li>";
+                echo "<li><a href='#" . $name . "'>" . $name . "</a></li>";
             }
             echo "</ul>";
         }
