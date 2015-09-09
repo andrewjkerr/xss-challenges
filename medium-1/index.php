@@ -16,10 +16,10 @@
             // Pesky XSS auditor!
             header('X-XSS-Protection: 0;');
             $name = $_POST['name'];
-            $name = str_replace('script', '', $name);
-            $name = str_replace('img', '', $name);
-            $name = str_replace('iframe', '', $name);
-            $name = str_replace('javascript', '', $name);
+            $name = preg_replace('/script/i', '', $name);
+            $name = preg_replace('/img/i', '', $name);
+            $name = preg_replace('/iframe/i', '', $name);
+            $name = preg_replace('/javascript/i', '', $name);
             echo "<h1>Your name: " . $name . "</h1>";
             $hacker_name = $name;
             $hacker_name = str_replace('a', '0x0A', $hacker_name);
